@@ -47,22 +47,22 @@ class ApplicationController extends Controller
         ]);
 
 
-        $file = $request->file('path');
-        $upload_folder = 'public/images';
-        $filename = $file->getClientOriginalName();
-
-        Storage::putFileAs($upload_folder, $file, $filename);
-
-        Application::create([
-                'user_id' => auth()->user()->id,
-                'status_id' => Status::where('name', 'Новая')->first()->id,
-                'path' => url('/public/storage/images/' . $filename ),
-            ] + $request->all());
-
-
         if ($validator->fails()) {
-            return redirect()->route('home')->with('message', 'Error: Необходимо выбрать файл изображения');
+            return redirect('home')->withErrors($validator);
+//            return redirect()->route('home')->with('message', 'Error: Необходимо выбрать файл изображения');
         } else {
+            $file = $request->file('path');
+            $upload_folder = 'public/images';
+            $filename = $file->getClientOriginalName();
+
+            Storage::putFileAs($upload_folder, $file, $filename);
+
+            Application::create([
+                    'user_id' => auth()->user()->id,
+                    'status_id' => Status::where('name', 'Новая')->first()->id,
+                    'path' => url('/public/storage/images/' . $filename ),
+                ] + $request->all());
+
             return view('home', ['data' => Category::all(), 'applications' => Application::all()]);
         }
 

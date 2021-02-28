@@ -30,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <label for="path">Фото</label>
-                        <input type="file" name="path" id="path" multiple>
+                        <input type="file" name="path" id="path" >
                     </div>
                     <input type="submit" value="Отправить" class="btn btn-danger">
                 </form>
